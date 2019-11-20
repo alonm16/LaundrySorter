@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "210451915935",
+    "firebase_url": "https://laundrysorter.firebaseio.com",
+    "project_id": "laundrysorter",
+    "storage_bucket": "laundrysorter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210451915935:android:20e00f811b314dab88aeaa",
+        "android_client_info": {
+          "package_name": "com.example.laundrysorter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210451915935-clb21alcebg4gukaf3577qmm5jnt53hv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.laundrysorter",
+            "certificate_hash": "df400cc8cdde86c3974636f02814cda297459d44"
+          }
+        },
+        {
+          "client_id": "210451915935-oor4j14486ekbr7qal4e7h9f8b7unm5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBD4hkwzDFYAyHNXL7Kjrszwky8kAcQ_lk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210451915935-oor4j14486ekbr7qal4e7h9f8b7unm5f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
