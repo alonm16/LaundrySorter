@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LaundrySorter</string>
+    <string name="app_name">Laundry Sorter</string>
     <string name="join_now">Join now</string>
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="sign_in">Sign in</string>
@@ -8,4 +8,7 @@
     <string name="sign_up">Sign up</string>
     <string name="sign_up_msg">Create your account:</string>
     <string name="forgot_password">Forgot password?</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="passwords_not_matching">Those passwords didn\'t match</string>
+    <string name="passwords_not_matching_warning">Passwords are not matching</string>
 </resources>

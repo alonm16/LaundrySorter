@@ -2,12 +2,16 @@ package com.example.laundrysorter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -16,27 +20,39 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
     private final String TAG = MainActivity.this.getClass().getSimpleName();
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private EditText edEmail;
     private EditText edPass;
-
+    final static String ORIGIN_KEY = "origin_activity";
+    final static String ACTIVITY_NAME = "login";
+    TextView tvLogoLoading;
+    View loadingView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
+        tvLogoLoading = findViewById(R.id.tvLogoLoading);
+        loadingView = tvLogoLoading;
         edEmail = (EditText)findViewById(R.id.ed_signin_email);
         edPass = (EditText)findViewById(R.id.ed_signin_pass);
 
@@ -62,15 +78,25 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        mAuth = FirebaseAuth.getInstance();
-
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
 
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser!=null){
+            loadingView.setVisibility(View.VISIBLE);
+            ConstraintLayout layout = findViewById(R.id.constraintLoginScreen);
+            layout.setVisibility(View.GONE);
+            final Intent activity_intent = new Intent(this, HomeActivity.class);
+            startActivity(activity_intent);
+            finish();
 
+
+        }
+        else {
+            loadingView.setVisibility(View.GONE);
+            ConstraintLayout layout = findViewById(R.id.constraintLoginScreen);
+            layout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -78,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         String email,password;
         email = edEmail.getText().toString().trim();
         password = edPass.getText().toString();
+        loadingView = findViewById(R.id.progressBar);
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             Toast.makeText(this, "Enter valid email", Toast.LENGTH_SHORT).show();
             return;
@@ -104,12 +131,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
     private void googleSignIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+        loadingView = findViewById(R.id.progressBar);
     }
 
 
@@ -168,14 +193,9 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void forgotPasswordOnClick(View view){
-
-    }
-
     public void joinNowOnClick(View view){
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 
 }
-
