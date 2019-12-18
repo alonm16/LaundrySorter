@@ -45,10 +45,11 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible"
-        >
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="invisible">
 
 
         <TextView
@@ -85,12 +86,12 @@
             android:background="@drawable/custom_edittext"
             android:ems="10"
             android:hint="@string/email"
-            android:textColorHint="@color/colorPrimaryText"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:textColor="@color/colorPrimaryText"
+            android:textColorHint="@color/colorPrimaryText"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.333"
@@ -108,13 +109,13 @@
             android:background="@drawable/custom_edittext"
             android:ems="10"
             android:hint="@string/password"
-            android:textColorHint="@color/colorPrimaryText"
             android:importantForAutofill="no"
             android:inputType="textPassword"
             android:maxLength="55"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:textColor="@color/colorPrimaryText"
+            android:textColorHint="@color/colorPrimaryText"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/tvForgotPass"
             app:layout_constraintEnd_toEndOf="parent"
@@ -134,11 +135,11 @@
             android:focusable="true"
             android:padding="5dp"
             android:text="@string/forgot_password"
-            android:visibility="invisible"
-
             android:textColor="@color/colorAccent"
+
             android:textSize="18sp"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/btn_signin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ed_signin_pass" />
