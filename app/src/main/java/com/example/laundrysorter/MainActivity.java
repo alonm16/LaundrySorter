@@ -88,17 +88,38 @@ public class MainActivity extends AppCompatActivity {
             ConstraintLayout layout = findViewById(R.id.constraintLoginScreen);
             layout.setVisibility(View.GONE);
             final Intent activity_intent = new Intent(this, HomeActivity.class);
-            startActivity(activity_intent);
-            finish();
+            FirebaseFirestore.getInstance().collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        // updating the device token when logging in.
+                        Map<String, Object> user_deviceToken = new HashMap<>();
+                        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                        user_deviceToken.put("deviceToken", deviceToken);
+                        FirebaseFirestore.getInstance().collection("users").document(mAuth.getCurrentUser().getUid()).set(user_deviceToken)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "Device token after log in was successfully saved!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error writing document", e);
+                                    }
+                                });
 
-
-        }
-        else {
-            loadingView.setVisibility(View.GONE);
-            ConstraintLayout layout = findViewById(R.id.constraintLoginScreen);
-            layout.setVisibility(View.VISIBLE);
+                        startActivity(activity_intent);
+                        finish();
+                    } else {
+                        Log.d(TAG, "Failed with: ", task.getException());
+                    }
+                }
+            });
         }
     }
+
 
     public void onLoginClick (View view){
         String email,password;
