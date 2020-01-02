@@ -16,11 +16,12 @@
     <color name="buttonPurple">#200827</color>
 
 
-
+<!--
+####################THIS IS THE COLORS FOR THE PICKER ACTIVITY
+-->
 
     <color name="pickerWhite">#FFFFFF</color>
     <color name="pickerLightGray">#817F7F</color>
-    <color name="pickerDarkGray">#383838</color>
     <color name="pickerBlack">#000000</color>
 
 
@@ -31,15 +32,14 @@
 
 
     <color name="pickerLightBlue">#3DDBD6</color>
-    <color name="pickerLightGreen">#79E250</color>
-    <color name="pickerDarkYellow">#FF9800</color>
     <color name="pickerBrown">#4E2A0F</color>
 
     <color name="pickerRed">#C40101</color>
-    <color name="pickerDarkPink">#D81B60</color>
     <color name="pickerLightPink">#F077A1</color>
     <color name="pickerPurple">#800E61</color>
-
+<!--
+####################End of color picker
+-->
 
 
 
