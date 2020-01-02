@@ -11,4 +11,6 @@
     <string name="confirm_password">confirm password</string>
     <string name="passwords_not_matching">Those passwords didn\'t match</string>
     <string name="passwords_not_matching_warning">Passwords are not matching</string>
+    <string name="logout">Logout</string>
+    <string name="select_colors_instruction">Select Baskets colors</string>
 </resources>
