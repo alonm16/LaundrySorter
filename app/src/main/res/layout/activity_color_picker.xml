@@ -28,7 +28,9 @@
                 android:layout_margin="4dp"
 
                 android:layout_weight="1"
-                android:background="@color/pickerWhite" />
+                android:background="@color/pickerWhite"
+                android:onClick="colorClick"
+                android:tag="WHITE" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -36,7 +38,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/pickerLightGray" />
+                android:background="@color/pickerLightGray"
+                android:onClick="colorClick"
+                android:tag="GRAY" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -44,7 +48,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/pickerBlack" />
+                android:background="@color/pickerBlack"
+                android:onClick="colorClick"
+                android:tag="BLACK" />
 
         </LinearLayout>
 
@@ -63,6 +69,8 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:background="@color/pickerBlue"
+                android:onClick="colorClick"
+                android:tag="BLUE"
                 android:textSize="22sp" />
 
             <TextView
@@ -72,6 +80,8 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:background="@color/pickerOrange"
+                android:onClick="colorClick"
+                android:tag="ORANGE"
                 android:textSize="22sp" />
 
             <TextView
@@ -81,6 +91,8 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:background="@color/pickerGreen"
+                android:onClick="colorClick"
+                android:tag="GREEN"
                 android:textSize="22sp" />
 
         </LinearLayout>
@@ -99,7 +111,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/pickerLightBlue" />
+                android:background="@color/pickerLightBlue"
+                android:onClick="colorClick"
+                android:tag="LIGHTBLUE" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -107,7 +121,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/pickerYellow" />
+                android:background="@color/pickerYellow"
+                android:onClick="colorClick"
+                android:tag="YELLOW" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -115,7 +131,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/pickerBrown" />
+                android:background="@color/pickerBrown"
+                android:onClick="colorClick"
+                android:tag="BROWN" />
 
         </LinearLayout>
 
@@ -132,7 +150,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/pickerRed" />
+                android:background="@color/pickerRed"
+                android:onClick="colorClick"
+                android:tag="RED" />
 
             <TextView
                 android:id="@+id/textView15"
@@ -140,7 +160,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/pickerLightPink" />
+                android:background="@color/pickerLightPink"
+                android:onClick="colorClick"
+                android:tag="PINK" />
 
             <TextView
                 android:id="@+id/textView16"
@@ -148,7 +170,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/pickerPurple" />
+                android:background="@color/pickerPurple"
+                android:onClick="colorClick"
+                android:tag="PURPLE" />
 
         </LinearLayout>
 
