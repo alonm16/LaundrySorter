@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                                         Log.w(TAG, "Error writing document", e);
                                     }
                                 });
-
                         startActivity(activity_intent);
                         finish();
                     } else {
