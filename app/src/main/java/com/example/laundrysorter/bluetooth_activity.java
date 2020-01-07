@@ -27,7 +27,7 @@ public class bluetooth_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_bluetooth_activity);
 
         bluetooth = new BluetoothSPP(this);
 
@@ -42,7 +42,7 @@ public class bluetooth_activity extends AppCompatActivity {
 
         bluetooth.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
             public void onDeviceConnected(String name, String address) {
-                connect.setText("Connected to " + name);
+                connect.setText("Connected to laundry sorter successfully :)");
             }
 
             public void onDeviceDisconnected() {
@@ -69,7 +69,9 @@ public class bluetooth_activity extends AppCompatActivity {
         on.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bluetooth.send(ON, true);
+               // bluetooth.send(ON, true);
+                bluetooth.send("check",false);
+
             }
         });
 
@@ -101,6 +103,7 @@ public class bluetooth_activity extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
             if (resultCode == Activity.RESULT_OK)
                 bluetooth.connect(data);

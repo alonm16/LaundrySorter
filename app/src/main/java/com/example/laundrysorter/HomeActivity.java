@@ -111,6 +111,10 @@ public class HomeActivity extends AppCompatActivity {
         startActivityForResult(intent,PICK_COLOR_REQUEST);
     }
 
+    public void onSaveClick(View view){
+        Intent intent = new Intent(this, bluetooth_activity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
