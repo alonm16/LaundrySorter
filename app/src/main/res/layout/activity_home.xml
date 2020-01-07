@@ -79,7 +79,8 @@
                 android:layout_marginBottom="10dp"
                 android:background="@android:color/white"
                 android:fontFamily="casual"
-                android:onClick="onBasketColorClick" />
+                android:onClick="onBasketColorClick"
+                android:tag="1" />
         </LinearLayout>
 
 
@@ -109,7 +110,8 @@
                 android:layout_marginRight="4dp"
                 android:layout_marginBottom="10dp"
                 android:background="@android:color/white"
-                android:onClick="onBasketColorClick" />
+                android:onClick="onBasketColorClick"
+                android:tag="2" />
         </LinearLayout>
 
 
@@ -139,7 +141,8 @@
                 android:layout_marginRight="4dp"
                 android:layout_marginBottom="10dp"
                 android:background="@android:color/white"
-                android:onClick="onBasketColorClick" />
+                android:onClick="onBasketColorClick"
+                android:tag="3" />
         </LinearLayout>
     </LinearLayout>
 

@@ -3,6 +3,7 @@ package com.example.laundrysorter;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 
 
@@ -18,13 +19,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import com.google.firebase.auth.FirebaseAuth;
+import androidx.appcompat.app.AppCompatActivity;
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import app.akexorcist.bluetotohspp.library.BluetoothState;
+import app.akexorcist.bluetotohspp.library.DeviceList;
 
 
 public class HomeActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    BluetoothSPP bluetooth;
     String body;
-
 
     enum ColorPick {
         BLACK,WHITE,GRAY,BLUE,ORANGE,GREEN,YELLOW,LIGHTBLUE,BROWN,RED,PINK,PURPLE;
@@ -46,6 +51,8 @@ public class HomeActivity extends AppCompatActivity {
             }
             return WHITE;
         }
+
+
 
 
         public static int fromValue (ColorPick c){
@@ -70,6 +77,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final int PICK_COLOR_REQUEST = 1;
     private View requestedView = null;
+    private ColorPick basket1;
+    private ColorPick basket2;
+    private ColorPick basket3;
 
 
     @Override
@@ -79,6 +89,33 @@ public class HomeActivity extends AppCompatActivity {
 
         body = getIntent().getStringExtra("body");
         Toast.makeText(HomeActivity.this, "this is " + body, Toast.LENGTH_SHORT).show();
+        bluetooth = new BluetoothSPP(this);
+
+        if (!bluetooth.isBluetoothAvailable()) {
+            Toast.makeText(getApplicationContext(), "Bluetooth is not available", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        bluetooth.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
+            public void onDeviceConnected(String name, String address) {
+                Toast.makeText(getApplicationContext(),"Connected to laundry sorter successfully :)",Toast.LENGTH_SHORT).show();
+            }
+
+            public void onDeviceDisconnected() {
+                Toast.makeText(getApplicationContext(),"Connection lost :(",Toast.LENGTH_SHORT).show();
+            }
+
+            public void onDeviceConnectionFailed() {
+                Toast.makeText(getApplicationContext(),"unable to connect :(",Toast.LENGTH_SHORT).show();
+            }
+        });
+        bluetooth.setAutoConnectionListener(new BluetoothSPP.AutoConnectionListener() {
+            public void onNewConnection(String name, String address) {
+            }
+
+            public void onAutoConnectionStarted() {
+            }
+        });
 
 
     }
@@ -93,7 +130,25 @@ public class HomeActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         super.onStart();
+        if (!bluetooth.isBluetoothEnabled()) {
+            bluetooth.enable();
+        } else {
+            if (!bluetooth.isServiceAvailable()) {
+                bluetooth.setupService();
+                bluetooth.startService(BluetoothState.DEVICE_OTHER);
+            }
+        }
+        if (bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
+            bluetooth.disconnect();
+        } else {
+            bluetooth.autoConnect("HC-06");
+        }
     }
+    public void onDestroy() {
+        super.onDestroy();
+        bluetooth.stopService();
+    }
+
 
     public void logout(View view)
     {
@@ -112,8 +167,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onSaveClick(View view){
-        Intent intent = new Intent(this, bluetooth_activity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, bluetooth_activity.class);
+//        startActivity(intent);
+
+        bluetooth.send("begin",false);
+        bluetooth.send(convertColorToString(basket1)+"$",false);
+        bluetooth.send(convertColorToString(basket2)+"$",false);
+        bluetooth.send(convertColorToString(basket3),false);
+
     }
 
     @Override
@@ -127,9 +188,30 @@ public class HomeActivity extends AppCompatActivity {
             ColorPick color = ColorPick.fromInteger(data.getIntExtra("color",0));
             int color_res = convertColorToResourceColor(color);
             requestedView.setBackgroundColor(color_res);
+            String basket_num = requestedView.getTag().toString();
+            if (basket_num.equals("1")){
+                basket1 = color;
+            }
+            else if (basket_num.equals("2")) {
+                basket2 = color;
+            }
+            else {
+                basket3 = color;
+            }
         }
-
-
+        if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
+            if (resultCode == Activity.RESULT_OK)
+                bluetooth.connect(data);
+        } else if (requestCode == BluetoothState.REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
+                bluetooth.setupService();
+            } else {
+                Toast.makeText(getApplicationContext()
+                        , "Bluetooth was not enabled."
+                        , Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 
     @Override
@@ -168,6 +250,37 @@ public class HomeActivity extends AppCompatActivity {
         }
         return getResources().getColor(R.color.pickerWhite);
     }
+
+    private String convertColorToString (ColorPick color){
+        switch (color){
+            case BLACK:
+                return "BLACK";
+            case WHITE:
+                return "WHITE";
+            case GRAY:
+                return "GRAY";
+            case BLUE:
+                return "BLUE";
+            case ORANGE:
+                return "ORANGE";
+            case GREEN:
+                return "GREEN";
+            case YELLOW:
+                return "YELLOW";
+            case LIGHTBLUE:
+                return "LIGHTBLUE";
+            case BROWN:
+                return "BROWN";
+            case RED:
+                return "RED";
+            case PINK:
+                return "PINK";
+            case PURPLE:
+                return "PURPLE";
+        }
+        return "WHITE";
+    }
+
 
 
 
