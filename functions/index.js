@@ -1,39 +1,35 @@
-const admin = require ('firebase-admin');
-const functions = require ('firebase-functions');
-admin.initializeApp(functions.config().firebase);
+// The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
+const functions = require('firebase-functions');
 
-const functionTriggers = functions.region("us-central1").firestore;
-const db = admin.firestore();
-
-
-
-
-exports.sendMessageCopy = functionTriggers.document('users/{userId}')
-	.onCreate((snap,context)=>{
-		const userId = context.params.userId;
-		console.log('got here');
-		const payload = {
-			data:{
-				notification_type: 'BASKET',
-				title: 'New Message',
-				body: 'hello'
-			}
-		};
-		
-		return db.collection('users')
-			.doc(userId)
-			.get()
-			.then(receiverDoc=>{
-				const tokens = receiverDoc.data().deviceToken;
-				return admin.messaging().sendToDevice(tokens, payload);
-			});
-	});
-
-	
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+// The Firebase Admin SDK to access the Firebase Realtime Database.
+const admin = require('firebase-admin');
+admin.initializeApp();
+exports.checkflag = functions.database.ref('/notification') //give your database path instead here
+.onUpdate((snapshot, context) => {
+    let content = "";
+    const token = snapshot.after.val().token;  //replace it with your app token
+    const beforeToken = snapshot.before.val().token;
+    const basket1 = (snapshot.after.val().basket1).toString();
+    const basket2 = (snapshot.after.val().basket2).toString();
+    const basket3 = (snapshot.after.val().basket3).toString();
+    const basket1Before = (snapshot.before.val().basket1).toString();
+    const basket2Before = (snapshot.before.val().basket2).toString();
+    const basket3Before = (snapshot.before.val().basket3).toString();
+   
+    const payload = {
+        data:{
+            notification_type: 'BASKET',
+            title: 'New Message',
+            body: content,
+            basket1: basket1,
+            basket1Before: basket1Before,
+            basket2: basket2,
+            basket2Before: basket2Before,
+            basket3: basket3,
+            basket3Before: basket3Before
+        }
+    };
+    console.log('got here');
+    return admin.messaging().sendToDevice(token,payload);
+    
+});

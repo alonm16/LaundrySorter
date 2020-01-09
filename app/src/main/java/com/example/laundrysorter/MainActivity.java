@@ -28,6 +28,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -95,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
                         // updating the device token when logging in.
                         Map<String, Object> user_deviceToken = new HashMap<>();
                         String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                        DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference();
+                        mDatabase.child("notification").child("token").setValue(deviceToken);
                         user_deviceToken.put("deviceToken", deviceToken);
                         FirebaseFirestore.getInstance().collection("users").document(mAuth.getCurrentUser().getUid()).set(user_deviceToken)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {

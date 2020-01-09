@@ -15,7 +15,32 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        String check = remoteMessage.getData().get("basket1");
+        int basket1 = Integer.parseInt(remoteMessage.getData().get("basket1"));
+        int basket2 = Integer.parseInt(remoteMessage.getData().get("basket2"));
+        int basket3 = Integer.parseInt(remoteMessage.getData().get("basket3"));
+        int basket1Before = Integer.parseInt(remoteMessage.getData().get("basket1Before"));
+        int basket2Before = Integer.parseInt(remoteMessage.getData().get("basket2Before"));
+        int basket3Before = Integer.parseInt(remoteMessage.getData().get("basket3Before"));
+        String content;
+        if( (basket1Before==1 && basket1==0) || (basket2Before==1 && basket2==0) || (basket3Before==1 && basket3==0)){
+            return;
+        }
 
+        else if (basket1Before==0 && basket1==1)
+        {
+            content = "Basket 1 is full!";
+        }
+        else if (basket2Before==0 && basket2==1)
+        {
+            content = "Basket 2 is full!";
+        }
+        else if (basket3Before==0 && basket3==1)
+        {
+            content = "Basket 3 is full!";
+        }
+        else
+            return;
         Intent resultIntent = new Intent(this, HomeActivity.class);
         resultIntent.putExtra("body",remoteMessage.getData().get("body"));
         PendingIntent resultPendingIntent =
@@ -31,7 +56,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(remoteMessage.getData().get("title"))
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setContentText(remoteMessage.getData().get("body")).setAutoCancel(true).setContentIntent(resultPendingIntent);
+                .setContentText(content).setAutoCancel(true).setContentIntent(resultPendingIntent);
 
         builder.setContentIntent(resultPendingIntent);
 
