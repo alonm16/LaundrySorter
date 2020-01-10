@@ -1,5 +1,6 @@
 package com.example.laundrysorter;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +12,7 @@ import android.os.Bundle;
 
 import android.view.View;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -19,6 +21,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import androidx.appcompat.app.AppCompatActivity;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -30,6 +38,9 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     BluetoothSPP bluetooth;
     String body;
+    DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference();
+    int maxCapacity = 180;
+
 
     enum ColorPick {
         BLACK,WHITE,GRAY,BLUE,ORANGE,GREEN,YELLOW,LIGHTBLUE,BROWN,RED,PINK,PURPLE;
@@ -87,8 +98,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        body = getIntent().getStringExtra("body");
-        Toast.makeText(HomeActivity.this, "this is " + body, Toast.LENGTH_SHORT).show();
         bluetooth = new BluetoothSPP(this);
 
         if (!bluetooth.isBluetoothAvailable()) {
@@ -117,7 +126,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
+        setBasketsCapacity();
     }
 
 
@@ -141,7 +150,7 @@ public class HomeActivity extends AppCompatActivity {
         if (bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
             bluetooth.disconnect();
         } else {
-            bluetooth.autoConnect("HC-06");
+          //  bluetooth.autoConnect("HC-06");
         }
     }
     public void onDestroy() {
@@ -282,7 +291,55 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    public void setBasketsCapacity()
+    {
+        final TextView basket1 = findViewById(R.id.basket1Capacity);
+        final TextView basket2 = findViewById(R.id.basket2Capacity);
+        final TextView basket3 = findViewById(R.id.basket3Capacity);
 
+        mDatabase.child("basket1").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int capacity = (int)(long)dataSnapshot.getValue();
+                capacity = 100*(maxCapacity-capacity)/maxCapacity;
+                String percents = String.valueOf(capacity)+'%';
+                basket1.setText(percents);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase.child("basket2").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int capacity = (int)(long)dataSnapshot.getValue();
+                capacity = 100*(maxCapacity-capacity)/maxCapacity;
+                String percents = String.valueOf(capacity)+'%';
+                basket2.setText(percents);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        mDatabase.child("basket3").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int capacity = (int)(long)dataSnapshot.getValue();
+                capacity = 100*(maxCapacity-capacity)/maxCapacity;
+                String percents = String.valueOf(capacity)+'%';
+                basket3.setText(percents);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

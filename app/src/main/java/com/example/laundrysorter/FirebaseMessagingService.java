@@ -15,7 +15,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        String check = remoteMessage.getData().get("basket1");
+
         int basket1 = Integer.parseInt(remoteMessage.getData().get("basket1"));
         int basket2 = Integer.parseInt(remoteMessage.getData().get("basket2"));
         int basket3 = Integer.parseInt(remoteMessage.getData().get("basket3"));
@@ -42,7 +42,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         else
             return;
         Intent resultIntent = new Intent(this, HomeActivity.class);
-        resultIntent.putExtra("body",remoteMessage.getData().get("body"));
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,
