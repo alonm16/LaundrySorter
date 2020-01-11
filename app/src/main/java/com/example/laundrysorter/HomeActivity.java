@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
     BluetoothSPP bluetooth;
     String body;
     DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference();
-    int maxCapacity = 180;
+    int maxCapacity = 20;
 
 
     enum ColorPick {
@@ -179,10 +179,10 @@ public class HomeActivity extends AppCompatActivity {
 //        Intent intent = new Intent(this, bluetooth_activity.class);
 //        startActivity(intent);
 
-        bluetooth.send("begin",false);
-        bluetooth.send(convertColorToString(basket1)+"$",false);
-        bluetooth.send(convertColorToString(basket2)+"$",false);
-        bluetooth.send(convertColorToString(basket3),false);
+//        bluetooth.send("begin",false);
+//        bluetooth.send(convertColorToString(basket1)+"$",false);
+//        bluetooth.send(convertColorToString(basket2)+"$",false);
+//        bluetooth.send(convertColorToString(basket3),false);
 
     }
 
@@ -303,7 +303,7 @@ public class HomeActivity extends AppCompatActivity {
                 int capacity = (int)(long)dataSnapshot.getValue();
                 capacity = 100*(maxCapacity-capacity)/maxCapacity;
                 String percents = String.valueOf(capacity)+'%';
-                basket1.setText(percents);
+                basket1.setText("basket 1 \n" +"is " + percents + "full");
             }
 
             @Override
@@ -318,7 +318,7 @@ public class HomeActivity extends AppCompatActivity {
                 int capacity = (int)(long)dataSnapshot.getValue();
                 capacity = 100*(maxCapacity-capacity)/maxCapacity;
                 String percents = String.valueOf(capacity)+'%';
-                basket2.setText(percents);
+                basket2.setText("basket 2 \n" +"is " + percents + "full");
             }
 
             @Override
@@ -332,7 +332,7 @@ public class HomeActivity extends AppCompatActivity {
                 int capacity = (int)(long)dataSnapshot.getValue();
                 capacity = 100*(maxCapacity-capacity)/maxCapacity;
                 String percents = String.valueOf(capacity)+'%';
-                basket3.setText(percents);
+                basket3.setText("basket 3 \n" +"is " + percents + "full");
             }
 
             @Override
