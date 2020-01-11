@@ -5,9 +5,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import android.view.View;
@@ -91,6 +94,10 @@ public class HomeActivity extends AppCompatActivity {
     private ColorPick basket1;
     private ColorPick basket2;
     private ColorPick basket3;
+    private static final String prefBasket1 = "basket1";
+    private static final String prefBasket2 = "basket2";
+    private static final String prefBasket3 = "basket3";
+    private View basket1view, basket2view,basket3view;
 
 
     @Override
@@ -127,7 +134,21 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         setBasketsCapacity();
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        int defaultValue = 1;
+        int color1 = sharedPref.getInt(prefBasket1, defaultValue);
+        int color2 = sharedPref.getInt(prefBasket2, defaultValue);
+        int color3 = sharedPref.getInt(prefBasket3, defaultValue);
+        basket1view = findViewById(R.id.tvBasketColor1);
+        basket2view = findViewById(R.id.tvBasketColor2);
+        basket3view = findViewById(R.id.tvBasketColor3);
+
+        setBasketsColors(color1,color2,color3);
+
     }
+
+
 
 
     @Override
@@ -158,7 +179,18 @@ public class HomeActivity extends AppCompatActivity {
         bluetooth.stopService();
     }
 
+    private void setBasketsColors(int color1I, int color2I, int color3I) {
+        ColorPick color1 = ColorPick.fromInteger(color1I);
+        ColorPick color2 = ColorPick.fromInteger(color2I);
+        ColorPick color3 = ColorPick.fromInteger(color3I);
 
+        int color1_res = convertColorToResourceColor(color1);
+        int color2_res = convertColorToResourceColor(color2);
+        int color3_res = convertColorToResourceColor(color3);
+        basket1view.setBackgroundColor(color1_res);
+        basket2view.setBackgroundColor(color2_res);
+        basket3view.setBackgroundColor(color3_res);
+    }
     public void logout(View view)
     {
         mAuth.signOut();
@@ -194,20 +226,32 @@ public class HomeActivity extends AppCompatActivity {
             return;
 
         if (requestCode==PICK_COLOR_REQUEST){
+            String basketPreference = "";
             ColorPick color = ColorPick.fromInteger(data.getIntExtra("color",0));
             int color_res = convertColorToResourceColor(color);
             requestedView.setBackgroundColor(color_res);
             String basket_num = requestedView.getTag().toString();
             if (basket_num.equals("1")){
                 basket1 = color;
+
+                basketPreference = prefBasket1;
             }
             else if (basket_num.equals("2")) {
                 basket2 = color;
+                basketPreference = prefBasket2;
             }
             else {
                 basket3 = color;
+                basketPreference = prefBasket3;
             }
+            SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt(basketPreference, ColorPick.fromValue(color));
+            editor.apply();
         }
+
+
+
         if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
             if (resultCode == Activity.RESULT_OK)
                 bluetooth.connect(data);
