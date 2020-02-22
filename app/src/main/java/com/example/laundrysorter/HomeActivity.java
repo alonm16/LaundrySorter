@@ -10,7 +10,6 @@ import android.content.Intent;
 
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import android.view.View;
@@ -31,15 +30,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
-import app.akexorcist.bluetotohspp.library.DeviceList;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -140,9 +139,18 @@ public class HomeActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         int defaultValue = 1;
-        basket1 = sharedPref.getInt(prefBasket1, defaultValue);
-        basket2 = sharedPref.getInt(prefBasket2, defaultValue);
-        basket3 = sharedPref.getInt(prefBasket3, defaultValue);
+        basket1=getIntent().getIntExtra("basket1",-1);
+        if(basket1>0)
+        {
+            basket2=getIntent().getIntExtra("basket2",-1);
+            basket3=getIntent().getIntExtra("basket3",-1);
+        }
+        else{
+            basket1 = sharedPref.getInt(prefBasket1, defaultValue);
+            basket2 = sharedPref.getInt(prefBasket2, defaultValue);
+            basket3 = sharedPref.getInt(prefBasket3, defaultValue);
+        }
+
         basket1view = findViewById(R.id.tvBasketColor1);
         basket2view = findViewById(R.id.tvBasketColor2);
         basket3view = findViewById(R.id.tvBasketColor3);
@@ -231,8 +239,9 @@ public class HomeActivity extends AppCompatActivity {
         cur_choice.put("basket2", basket2);
         cur_choice.put("basket3", basket3);
         cur_choice.put("date", new Date());
+        ArrayList<Integer> cur_colors = new ArrayList<>(Arrays.asList(basket1, basket2, basket3));
         FirebaseFirestore.getInstance().collection("users").document(mAuth.getCurrentUser().
-                getUid()).collection("history").document().set(cur_choice);
+                getUid()).collection("history").document(cur_colors.toString()).set(cur_choice);
 
     }
 
@@ -395,9 +404,10 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void onHistoryClick(View view)
+
+    public void onHistoryClick(View view)
     {
-        Intent intent = new Intent(this, SignUpActivity.class);
+        Intent intent = new Intent(this, HistoryActivity.class);
         startActivity(intent);
         finish();
     }

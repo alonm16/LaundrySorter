@@ -1,5 +1,6 @@
 package com.example.laundrysorter;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-
-import io.opencensus.resource.Resource;
 
 public class HistoryAdapter extends FirestoreRecyclerAdapter<History, HistoryAdapter.HistoryHolder> {
 
@@ -28,7 +27,7 @@ public class HistoryAdapter extends FirestoreRecyclerAdapter<History, HistoryAda
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull HistoryHolder historyHolder, int i, @NonNull History history) {
+    protected void onBindViewHolder(@NonNull HistoryHolder historyHolder, int i, @NonNull final History history) {
         HomeActivity.ColorPick color1 = HomeActivity.ColorPick.fromInteger(history.getBasket1());
         HomeActivity.ColorPick color2 = HomeActivity.ColorPick.fromInteger(history.getBasket2());
         HomeActivity.ColorPick color3 = HomeActivity.ColorPick.fromInteger(history.getBasket3());
@@ -38,9 +37,22 @@ public class HistoryAdapter extends FirestoreRecyclerAdapter<History, HistoryAda
         int color1_res = convertColorToResourceColor(color1,res);
         int color2_res = convertColorToResourceColor(color2,res);
         int color3_res = convertColorToResourceColor(color3,res);
-        basket1view.setBackgroundColor(color1_res);
-        basket2view.setBackgroundColor(color2_res);
-        basket3view.setBackgroundColor(color3_res);
+
+        historyHolder.basket1view.setBackgroundColor(color1_res);
+        historyHolder.basket2view.setBackgroundColor(color2_res);
+        historyHolder.basket3view.setBackgroundColor(color3_res);
+
+        historyHolder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), HomeActivity.class);
+                intent.putExtra("basket1", history.getBasket1());
+                intent.putExtra("basket2", history.getBasket2());
+                intent.putExtra("basket3", history.getBasket3());
+                v.getContext().startActivity(intent);
+
+            }
+        });
 
     }
 
@@ -52,6 +64,9 @@ public class HistoryAdapter extends FirestoreRecyclerAdapter<History, HistoryAda
         public HistoryHolder (View itemView) {
             super(itemView);
             mView = itemView;
+            basket1view = itemView.findViewById(R.id.tvBasketColor1);
+            basket2view = itemView.findViewById(R.id.tvBasketColor2);
+            basket3view = itemView.findViewById(R.id.tvBasketColor3);
      
         }
     }

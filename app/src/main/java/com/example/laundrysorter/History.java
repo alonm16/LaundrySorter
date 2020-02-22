@@ -15,6 +15,8 @@ public class History {
         this.basket3 = basket3;
     }
 
+    public History(){}
+
     public Date getDate() {
         return date;
     }
