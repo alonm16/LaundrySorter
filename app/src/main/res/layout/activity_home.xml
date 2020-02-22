@@ -47,8 +47,8 @@
         android:background="@color/colorPrimaryText"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:paddingTop="40dp"
-        android:paddingBottom="40dp"
+        android:paddingTop="30dp"
+
         app:layout_constraintTop_toBottomOf="@+id/textView10"
         tools:layout_editor_absoluteX="-6dp">
 
@@ -145,7 +145,30 @@
                 android:tag="3" />
         </LinearLayout>
     </LinearLayout>
-
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorPrimaryText"
+        android:paddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" >
+        <Button
+            android:id="@+id/history"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_edittext"
+            android:fontFamily="casual"
+            android:onClick="onHistoryClick"
+            android:layout_gravity="center"
+            android:text="choose from history"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+           />
+    </LinearLayout>
     <Button
         android:id="@+id/saveChangeBtn"
         android:layout_width="0dp"
@@ -160,7 +183,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <TextView
         android:id="@+id/basket1Capacity"

@@ -29,8 +29,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
@@ -40,7 +46,6 @@ public class HomeActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     BluetoothSPP bluetooth;
-    String body;
     DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference();
     int maxCapacity = 20;
 
@@ -67,8 +72,6 @@ public class HomeActivity extends AppCompatActivity {
         }
 
 
-
-
         public static int fromValue (ColorPick c){
             switch (c) {
                 case BLACK: return 0;
@@ -86,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
             }
             return 1;
         }
-    };
+    }
 
 
     private static final int PICK_COLOR_REQUEST = 1;
@@ -216,12 +219,20 @@ public class HomeActivity extends AppCompatActivity {
 //        bluetooth.send(convertColorToString(basket2)+"$",false);
 //        bluetooth.send(convertColorToString(basket3),false);
 
-         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-         SharedPreferences.Editor editor = sharedPref.edit();
-         editor.putInt(prefBasket1, basket1);
-         editor.putInt(prefBasket2, basket2);
-         editor.putInt(prefBasket3, basket3);
-         editor.apply();
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(prefBasket1, basket1);
+        editor.putInt(prefBasket2, basket2);
+        editor.putInt(prefBasket3, basket3);
+        editor.apply();
+
+        Map<String, Object> cur_choice = new HashMap<>();
+        cur_choice.put("basket1", basket1);
+        cur_choice.put("basket2", basket2);
+        cur_choice.put("basket3", basket3);
+        cur_choice.put("date", new Date());
+        FirebaseFirestore.getInstance().collection("users").document(mAuth.getCurrentUser().
+                getUid()).collection("history").document().set(cur_choice);
 
     }
 
@@ -246,10 +257,6 @@ public class HomeActivity extends AppCompatActivity {
             else {
                 basket3 = ColorPick.fromValue(color);
             }
-            /*SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putInt(basketPreference, ColorPick.fromValue(color));
-            editor.apply();*/
         }
 
 
@@ -386,6 +393,13 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void onHistoryClick(View view)
+    {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }
