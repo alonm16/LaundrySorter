@@ -91,9 +91,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final int PICK_COLOR_REQUEST = 1;
     private View requestedView = null;
-    private ColorPick basket1;
-    private ColorPick basket2;
-    private ColorPick basket3;
+    private int basket1;
+    private int basket2;
+    private int basket3;
     private static final String prefBasket1 = "basket1";
     private static final String prefBasket2 = "basket2";
     private static final String prefBasket3 = "basket3";
@@ -137,14 +137,14 @@ public class HomeActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         int defaultValue = 1;
-        int color1 = sharedPref.getInt(prefBasket1, defaultValue);
-        int color2 = sharedPref.getInt(prefBasket2, defaultValue);
-        int color3 = sharedPref.getInt(prefBasket3, defaultValue);
+        basket1 = sharedPref.getInt(prefBasket1, defaultValue);
+        basket2 = sharedPref.getInt(prefBasket2, defaultValue);
+        basket3 = sharedPref.getInt(prefBasket3, defaultValue);
         basket1view = findViewById(R.id.tvBasketColor1);
         basket2view = findViewById(R.id.tvBasketColor2);
         basket3view = findViewById(R.id.tvBasketColor3);
 
-        setBasketsColors(color1,color2,color3);
+        setBasketsColors();
 
     }
 
@@ -179,10 +179,10 @@ public class HomeActivity extends AppCompatActivity {
         bluetooth.stopService();
     }
 
-    private void setBasketsColors(int color1I, int color2I, int color3I) {
-        ColorPick color1 = ColorPick.fromInteger(color1I);
-        ColorPick color2 = ColorPick.fromInteger(color2I);
-        ColorPick color3 = ColorPick.fromInteger(color3I);
+    private void setBasketsColors() {
+        ColorPick color1 = ColorPick.fromInteger(basket1);
+        ColorPick color2 = ColorPick.fromInteger(basket2);
+        ColorPick color3 = ColorPick.fromInteger(basket3);
 
         int color1_res = convertColorToResourceColor(color1);
         int color2_res = convertColorToResourceColor(color2);
@@ -216,6 +216,13 @@ public class HomeActivity extends AppCompatActivity {
 //        bluetooth.send(convertColorToString(basket2)+"$",false);
 //        bluetooth.send(convertColorToString(basket3),false);
 
+         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+         SharedPreferences.Editor editor = sharedPref.edit();
+         editor.putInt(prefBasket1, basket1);
+         editor.putInt(prefBasket2, basket2);
+         editor.putInt(prefBasket3, basket3);
+         editor.apply();
+
     }
 
     @Override
@@ -226,28 +233,23 @@ public class HomeActivity extends AppCompatActivity {
             return;
 
         if (requestCode==PICK_COLOR_REQUEST){
-            String basketPreference = "";
             ColorPick color = ColorPick.fromInteger(data.getIntExtra("color",0));
             int color_res = convertColorToResourceColor(color);
             requestedView.setBackgroundColor(color_res);
             String basket_num = requestedView.getTag().toString();
             if (basket_num.equals("1")){
-                basket1 = color;
-
-                basketPreference = prefBasket1;
+                basket1 = ColorPick.fromValue(color);
             }
             else if (basket_num.equals("2")) {
-                basket2 = color;
-                basketPreference = prefBasket2;
+                basket2 = ColorPick.fromValue(color);
             }
             else {
-                basket3 = color;
-                basketPreference = prefBasket3;
+                basket3 = ColorPick.fromValue(color);
             }
-            SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+            /*SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putInt(basketPreference, ColorPick.fromValue(color));
-            editor.apply();
+            editor.apply();*/
         }
 
 
